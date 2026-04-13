@@ -12,16 +12,18 @@ from typing import Optional
 from loguru import logger
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
+from pathlib import Path
 
 load_dotenv()
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 # Stderr only — stdout is reserved for the MCP stdio protocol.
 # File logging goes to /logs/cozi-mcp.log (mount a host dir to /logs to persist).
+log_path = Path(os.getenv("LOG_PATH", "/tmp/cozi-mcp.log"))
 logger.remove()
 logger.add(sys.stderr, level="DEBUG", format="{time:HH:mm:ss} | {level} | {message}")
 logger.add(
-    "/logs/cozi-mcp.log",
+    log_path,
     level="DEBUG",
     format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
     rotation="10 MB",
